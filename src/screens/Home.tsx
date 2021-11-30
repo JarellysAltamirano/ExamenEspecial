@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 
-const Calificaciones = () => {
+const Home = () => {
 
 
     const [estudiante, setEstudiante] = useState<string>('')
@@ -15,16 +15,16 @@ const Calificaciones = () => {
     const [notaFinales, setnotaFinales] = useState<string[]>([])
     const [notaFinal, setnotaFinal] = useState<string>('')
 
-    let promedioFinal: number = 0
+    let calificacionFinal: number = 0
     let promedioValidado = ''
     let reprobado = 'SD'
 
     const ValidarNota = () => {
         setEstudiantes([...estudiantes, estudiante])
         let notaFinal = parseFloat(primerParcial) + parseFloat(segundoParcial)
-        promedioFinal = notaFinal / 2
+        calificacionFinal = notaFinal / 2
         ValidacionDeAprobacion()
-        setnotaFinal(promedioFinal.toPrecision())
+        setnotaFinal(calificacionFinal.toPrecision())
     }
 
     const ValidacionDeAprobacion = () => {
@@ -33,7 +33,7 @@ const Calificaciones = () => {
             setnotaFinales([...notaFinales, promedioValidado])
         }
         else {
-            setnotaFinales([...notaFinales, promedioFinal.toString()])
+            setnotaFinales([...notaFinales, calificacionFinal.toString()])
         }
     }
     return (
@@ -57,7 +57,7 @@ const Calificaciones = () => {
            <Text style={styles.text}>lP</Text>
             <TextInput
                 style={styles.title}
-                placeholder={"lP"}
+                placeholder={"1P"}
                 onChangeText={setPrimerParcial}
                
             />
@@ -66,7 +66,7 @@ const Calificaciones = () => {
            <Text style={styles.text}>llP</Text>
             <TextInput
                 style={styles.title}
-                placeholder={"llP"}
+                placeholder={"2P"}
                 onChangeText={setSegundoParcial}
                
             />
@@ -99,8 +99,7 @@ const Calificaciones = () => {
     )
 }
 
-export default Calificaciones
-
+export default Home
 const styles = StyleSheet.create({
     container: {
         width: '95%',
