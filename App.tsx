@@ -8,8 +8,8 @@ export default function App() {
 
 
   return (
-    // <Home/>
-    <Calcular/>
+    <Home/>
+    // <Calcular/>
   
   );
 }

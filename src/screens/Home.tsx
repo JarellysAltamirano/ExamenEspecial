@@ -1,69 +1,105 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, TextInput, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 
-const Home = () => {
-
-    const [tarea, setTarea] = useState < string > ('')
-    const [tareas, setTareas] = useState < string[] > ([])
+const Calificaciones = () => {
 
 
-    const crearTarea = () => {
-        setTareas([...tareas, tarea])
+    const [estudiante, setEstudiante] = useState<string>('')
+
+    const [estudiantes, setEstudiantes] = useState<string[]>([])
+
+    const [primerParcial, setPrimerParcial] = useState('')
+
+    const [segundoParcial, setSegundoParcial] = useState('')
+
+    const [notaFinales, setnotaFinales] = useState<string[]>([])
+    const [notaFinal, setnotaFinal] = useState<string>('')
+
+    let promedioFinal: number = 0
+    let promedioValidado = ''
+    let reprobado = 'SD'
+
+    const ValidarNota = () => {
+        setEstudiantes([...estudiantes, estudiante])
+        let notaFinal = parseFloat(primerParcial) + parseFloat(segundoParcial)
+        promedioFinal = notaFinal / 2
+        ValidacionDeAprobacion()
+        setnotaFinal(promedioFinal.toPrecision())
     }
 
-    const getTareas = () => {
-        setTareas([...tareas])
+    const ValidacionDeAprobacion = () => {
+        if (primerParcial === 'SD' || segundoParcial === 'SD' || primerParcial === 'NSP' || segundoParcial === 'SD') {
+            promedioValidado = reprobado
+            setnotaFinales([...notaFinales, promedioValidado])
+        }
+        else {
+            setnotaFinales([...notaFinales, promedioFinal.toString()])
+        }
     }
-
-    const eliminarTarea = (id: number) => {
-
-        tareas.splice(id, 1)
-        getTareas()
-    }
-
-    useEffect(getTareas, [])
-
     return (
         <View style={styles.containerBase}>
-           
+            <View>
+            <Text style={styles.container2}>Calificaciones</Text>
 
-                
-                <View style={styles.container}>
-                    
-                    <TextInput
-                        placeholder={"Escriba su Tarea"}
-                        style={styles.text}
-                        onChangeText={setTarea} />
+            </View>
+            <Text style={styles.textCabeza}>Nombre del estudiante</Text>
+            <View style={styles.container}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder={"Nombre del Estudiante"}
+                    onChangeText={setEstudiante}
+                />
+            </View>
 
-                    <Button
-                        title="Agregar"
-                        onPress={crearTarea}
-                        color="#7cf285"
-                    />
+            <View style={styles.containerNota}>
+               
+            <View>
+           <Text style={styles.text}>lP</Text>
+            <TextInput
+                style={styles.title}
+                placeholder={"lP"}
+                onChangeText={setPrimerParcial}
+               
+            />
+           </View>
+           <View>
+           <Text style={styles.text}>llP</Text>
+            <TextInput
+                style={styles.title}
+                placeholder={"llP"}
+                onChangeText={setSegundoParcial}
+               
+            />
+           </View>
+
+                <View>
+                    <Text style={styles.text}>NF</Text>
+                    <Text style={styles.title}>{notaFinal}</Text>
+
                 </View>
-                <ScrollView>
-
+                <TouchableOpacity
+                    onPress={ValidarNota}
+                    style={styles.botonReset}
+                >
+                    <Text style={styles.textbotonReset}>Agregar</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView>
                 {
-                    tareas.map(lista => (
-                        <View style={styles.container}>
-                            <Text style={styles.text}>{lista}</Text>
-                          
-                            <Button
-                                title="Eliminar"
-                                onPress={() => eliminarTarea(lista.id)}
-                                color="#f04859"
-                            />
+                    estudiantes.map((estudiantes, index) => (
+                        <View style={styles.container} key={index}>
+                            <Text style={styles.text} >{estudiantes}</Text>
+                            <Text style={[notaFinales[index] < '60' ? styles.textReprobado : styles.textAprobado]}>Nota Final :{notaFinales[index]}</Text>
                         </View>
                     ))
+
                 }
-                
             </ScrollView>
         </View>
     )
-
 }
 
-export default Home
+export default Calificaciones
 
 const styles = StyleSheet.create({
     container: {
@@ -71,33 +107,94 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
-        paddingVertical: 8,
+        paddingVertical: 10,
         paddingHorizontal: 8,
         borderRadius: 10,
         marginLeft: 10,
-        borderColor: '#178581',
         borderWidth: 3,
+        borderColor: '#8C8A8A',
+        marginTop: 10,
+    },
+    inputs: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 22,
+        color: '#034C50',
+        width: '70%'
+    },
+    containerBase: {
+        marginTop: 10,
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'center'
+    },
+    containerNota: {
+        width: '95%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 8,
+        borderRadius: 10,
+        marginLeft: 10,
+        borderWidth: 3,
+        borderColor: '#05786A',
+        marginTop: 10,
+    },
+    botonReset: {
+        backgroundColor: '#8C8A8A',
+        borderRadius: 8,
+        width: '30%',
+        paddingVertical: 7,
+        marginTop: 5
+    },
+    textbotonReset: {
+        color: '#05786A',
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 10
 
     },
     text: {
         fontSize: 24,
         color: '#05786A',
-        width: '70%'
     },
-    containerBase: {
-        marginTop:80,
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-
+    textReprobado: {
+        fontSize: 24,
+        color: '#B52222',
     },
-    inputs: {
-        backgroundColor: '#F2F8FB',
+    textAprobado: {
+        fontSize: 24,
+        color: '#05786A',
+    },
+    title: {
+        width: 50,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        backgroundColor: "#FFFFFF",
+        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 8,
         borderRadius: 8,
-        padding: 10,
-        textAlign: 'right',
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: '#004445'
+        marginLeft: 10,
+        marginTop: 3,
+        borderWidth: 2,
+        borderColor: "#8C8A8A",
 
+    },
+    textCabeza: {
+        fontSize: 30,
+        color: '#034C50',
+        marginTop: 50,
+        marginLeft: 10
+    },
+    container2: {
+        marginTop: 40,
+        fontSize: 25,
+        fontWeight: "bold",
+        color: '#8C8A8A'
     }
+
 })

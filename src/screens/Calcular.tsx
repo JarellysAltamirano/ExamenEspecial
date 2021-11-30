@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, } from 'react-native'
-
-
-
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Button } from 'react-native'
 
 const Calcular = () => {
     const [primerParcial, setPrimerParcial] = useState('')
@@ -11,31 +8,52 @@ const Calcular = () => {
     const [resultado, setResultado] = useState<number>(0)
 
 
-    
 
-        const calnotaFinal = () => {
-            const dividir = 2;
-           const notafinal = (parseInt(primerParcial)) + (parseInt(segundoParcial))
-            setResultado(notafinal)
-        }
 
-        
+    const calnotaFinal = () => {
+        const dividir = 2;
+        let notafinal = (parseInt(primerParcial) + parseInt(segundoParcial)) / dividir
+        setResultado(notafinal)
+    }
+    const [tarea, setTarea] = useState<string>('')
+    const [tareas, setTareas] = useState<string[]>([])
 
-{
-}
+
+
+    const crearTarea = () => {
+        setTareas([...tareas, tarea])
+    }
+
+    const getTareas = () => {
+        setTareas([...tareas])
+    }
+
+
+
+
+
+
+
 
     return (
 
+
         <View style={styles.container}>
-            <ScrollView>
+
+
+            <View style={styles.container}>
 
                 <TextInput
+                    placeholder={"Nombre del Estudiante"}
+                    style={styles.text}
+                    onChangeText={setTarea} />
+                <TextInput
                     style={styles.inputs}
-                    placeholder="pirmer parcial"
+                    placeholder="primer parcial"
                     onChangeText={setPrimerParcial}
 
                 />
-                <Text style={styles.text}>Contraseña</Text>
+
                 <TextInput
                     style={styles.inputs}
                     placeholder="segundo parcial"
@@ -44,15 +62,37 @@ const Calcular = () => {
 
                 />
 
-
-
-                <Text style={styles.text}> La nota finales  de {resultado} </Text>
                 <TouchableOpacity
                     onPress={calnotaFinal}
                     style={styles.botonReset}
                 >
                     <Text style={styles.textbotonReset}>Calcular</Text>
                 </TouchableOpacity>
+
+                <Text style={styles.text}> {setTarea}La nota final es  de {resultado} </Text>
+
+
+               
+                <Button 
+
+                    title="Agregar"
+                    onPress={crearTarea}
+                    color="blue"
+                />
+
+            </View>
+            <ScrollView>
+
+            {tareas.map((lista, index) => (
+          <View style={styles.container} key={index}>
+            <Text style={styles.text}>{lista}</Text>
+            <Text>Nota Final:{resultado}</Text>
+          </View>
+        ))}
+
+
+
+
 
 
             </ScrollView>
@@ -71,20 +111,22 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         fontSize: 30,
         fontWeight: 'bold',
-        color: '#004445',
+        color: 'black',
         marginTop: 30,
 
     },
     text: {
-        fontSize: 20,
+        marginTop: 50,
+        fontSize: 24,
         color: '#05786A',
-        marginTop: 30
+        width: '70%'
     },
     container: {
         flex: 1,
-        backgroundColor: '#f0e0b4',
+        backgroundColor: 'white',
         width: '95%',
-        marginLeft: 10
+        marginLeft: 10,
+        marginTop: 50
 
     },
     botonReset: {
@@ -92,14 +134,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         paddingVertical: 9,
-        marginTop: 1,
+        marginTop: 50,
 
     },
     textbotonReset: {
+        marginTop: 10,
         color: '#00514E',
         fontWeight: 'bold',
         fontSize: 35,
         textAlign: 'center'
 
-    }
+    },
 })
